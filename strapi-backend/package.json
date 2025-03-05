@@ -1,5 +1,5 @@
 {
-  "name": "my-strapi-project",
+  "name": "strapi-backend",
   "version": "0.1.0",
   "private": true,
   "description": "A Strapi application",
@@ -9,6 +9,7 @@
     "deploy": "strapi deploy",
     "dev": "strapi develop",
     "develop": "strapi develop",
+    "seed:example": "node ./scripts/seed.js",
     "start": "strapi start",
     "strapi": "strapi",
     "upgrade": "npx @strapi/upgrade latest",
@@ -18,7 +19,9 @@
     "@strapi/plugin-cloud": "5.11.0",
     "@strapi/plugin-users-permissions": "5.11.0",
     "@strapi/strapi": "5.11.0",
-    "better-sqlite3": "11.3.0",
+    "fs-extra": "^10.0.0",
+    "mime-types": "^2.1.27",
+    "pg": "8.8.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.0.0",
@@ -35,6 +38,6 @@
     "npm": ">=6.0.0"
   },
   "strapi": {
-    "uuid": "b61031c9-12cb-4e72-a2d7-a6331224f3da"
+    "uuid": "e8e2aa37-c0d0-4ee8-a417-149e5f889fb0"
   }
 }
