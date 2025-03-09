@@ -1,0 +1,20 @@
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 320px;
+    min-height: 100vh;
+    background-color: #b4cab8;
+  }
+  
+  form{
+    background-color: #91c099;
+    border-radius: 25px;
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    margin: 10px;
+  }
