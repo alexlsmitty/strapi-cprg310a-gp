@@ -1,0 +1,151 @@
+/* styles.css */
+
+/* Color Variables */
+:root {
+  --primary-mint: #a0e7e5;       /* Fresh mint green */
+  --accent-pink: #ffb6c1;        /* Soft light pink */
+  --background-white: #ffffff;   
+  --secondary-white: #f8f9fa;    /* Light background for inputs/cards */
+  --text-color: #333333;         
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Global Styles */
+body {
+  background-color: var(--background-white);
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+/* Utility Classes */
+.mt-2 {
+  margin-top: 1rem;
+}
+.mb-2 {
+  margin-bottom: 1rem;
+}
+.p-2 {
+  padding: 1rem;
+}
+.container {
+  padding: 2rem;
+}
+
+/* AppBar Customization */
+.MuiAppBar-root {
+  background-color: var(--primary-mint) !important;
+  box-shadow: none !important;
+}
+.MuiToolbar-root {
+  padding: 0 1rem !important;
+}
+
+/* Buttons: Modern, Rounded, and Interactive */
+.MuiButton-root {
+  border-radius: 30px !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.MuiButton-root:hover {
+  transform: translateY(-2px);
+}
+.MuiButton-contained {
+  background-color: var(--primary-mint) !important;
+  color: var(--background-white) !important;
+}
+.MuiButton-outlined {
+  border-color: var(--accent-pink) !important;
+  color: var(--accent-pink) !important;
+}
+
+/* Inputs: Sleek, Rounded, and Responsive */
+.MuiOutlinedInput-root {
+  border-radius: 12px !important;
+  background-color: var(--secondary-white);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.MuiOutlinedInput-root:hover {
+  box-shadow: 0 0 5px var(--primary-mint);
+}
+.MuiOutlinedInput-root.Mui-focused {
+  border-color: var(--primary-mint) !important;
+  box-shadow: 0 0 8px var(--primary-mint);
+}
+.MuiInputLabel-root {
+  color: var(--primary-mint) !important;
+}
+
+/* Underline for Text Fields */
+.MuiInput-underline:after {
+  border-bottom-color: var(--primary-mint);
+}
+
+/* Cards / Paper Components: Elevated and Rounded */
+.MuiPaper-root {
+  border-radius: 16px !important;
+  padding: 1rem;
+  box-shadow: 0 4px 12px var(--shadow-color) !important;
+}
+
+/* Tabs Styling */
+.MuiTabs-root {
+  border-bottom: 1px solid var(--accent-pink);
+}
+.MuiTab-root {
+  text-transform: none !important;
+  font-weight: 600 !important;
+  color: var(--text-color) !important;
+}
+.MuiTab-root.Mui-selected {
+  color: var(--primary-mint) !important;
+  font-weight: 700 !important;
+}
+
+/* Alerts: Rounded and Noticeable */
+.MuiAlert-root {
+  border-radius: 12px !important;
+  font-weight: 500;
+}
+
+/* Dialog / Modal Customization */
+.MuiDialog-paper {
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+/* Typography Enhancements */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-color);
+  font-weight: 700;
+  margin-top: 0;
+}
+
+/* Link Styling */
+a {
+  color: var(--primary-mint);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: var(--accent-pink);
+}
+
+/* Additional Utility Classes */
+.rounded {
+  border-radius: 12px;
+}
+.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.elevated {
+  box-shadow: 0 8px 20px var(--shadow-color);
+}
+.transition {
+  transition: all 0.3s ease;
+}
