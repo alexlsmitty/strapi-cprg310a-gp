@@ -13,6 +13,7 @@ export const AuthProvider = ({ children }) => {
       const { data } = await supabase.auth.getSession();
       // Set user to either the session user or null (if not authenticated)
       setUser(data?.session?.user ?? null);
+      
     };
 
     fetchSession();
@@ -20,6 +21,7 @@ export const AuthProvider = ({ children }) => {
     // Listen for auth changes (login/logout)
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
+      console.log(session);
     });
 
     return () => {
