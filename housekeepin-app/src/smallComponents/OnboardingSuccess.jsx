@@ -1,48 +1,36 @@
+// OnboardingSuccess.jsx
+
 import React from 'react';
-import { 
-  Box, 
-  Typography, 
-  Button, 
-  List, 
-  ListItem, 
-  ListItemText,
-  Paper
-} from '@mui/material';
 
 const OnboardingSuccess = ({ household, inviteEmails, onFinish }) => {
   return (
-    <Paper elevation={3} sx={{ p: 4, textAlign: 'center' }}>
-      <Typography variant="h5" gutterBottom>
-        Onboarding Complete!
-      </Typography>
-      <Typography variant="body1" paragraph>
-        You've set up the <strong>{household?.name}</strong> household
-        {inviteEmails.filter(email => email.trim()).length > 0 && " and invited:"}
-      </Typography>
-      
-      {inviteEmails.filter(email => email.trim()).length > 0 && (
-        <Box bgcolor="rgba(160, 231, 229, 0.1)" borderRadius={2} p={2} mb={3}>
-          <List>
-            {inviteEmails
-              .filter((email) => email.trim() !== '')
-              .map((email, idx) => (
-                <ListItem key={idx}>
-                  <ListItemText primary={email} />
-                </ListItem>
-              ))}
-          </List>
-        </Box>
-      )}
-      
-      <Typography variant="body1" paragraph>
-        We've also created your first task. Feel free to add more tasks!
-      </Typography>
-      
-      <Button variant="contained" onClick={onFinish} sx={{ mt: 2 }}>
-        Go to Dashboard
-      </Button>
-    </Paper>
+    <div>
+      <h2>Onboarding Complete!</h2>
+      <p>
+        You’ve set up the <strong>{household?.name}</strong> household and invited:
+      </p>
+      <ul>
+        {inviteEmails
+          .filter((email) => email.trim() !== '')
+          .map((email, idx) => (
+            <li key={idx}>{email}</li>
+          ))}
+      </ul>
+      <p>We’ve also created your first task. Feel free to add more tasks!</p>
+      <button onClick={onFinish}>Go to Dashboard</button>
+    </div>
   );
 };
 
-export default OnboardingSuccess;
+const finishOnboarding = async () => {
+    // set `onboarding_complete` to true in `public.users`
+    await supabase
+      .from('users')
+      .update({ onboarding_complete: true })
+      .eq('id', user.id);
+  
+    // Then route to the main dashboard
+    navigate('/');
+  };
+
+export default { OnboardingSuccess, finishOnboarding };

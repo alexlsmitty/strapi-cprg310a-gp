@@ -1,6 +1,6 @@
 # Housekeepin App
 
-Housekeepin App is a front-end application developed as part of the CPRG310A Group Project. It is designed to work with a Supabase backend to provide a full-stack solution. This document details how to set up and run the project locally.
+Housekeepin App is a front-end application developed as part of the CPRG310A Group Project. It is designed to work with a Strapi backend to provide a full-stack solution. This document details how to set up and run the project locally.
 
 ## Table of Contents
 
@@ -52,6 +52,11 @@ REACT_APP_API_URL=http://localhost:1337
 Replace http://localhost:1337 with the URL where your Supabase backend is running.
 Add or adjust any additional variables as needed.
 Supabase Backend Setup
+The Housekeepin App is designed to work with a Strapi backend. If you haven’t set up your Strapi instance yet, follow these steps:
+
+Clone or Navigate to the Strapi Project:
+
+If the Strapi backend is included in this repository (or provided separately), navigate to its directory. Otherwise, clone the official Strapi repository or your own Strapi project.
 
 Install Dependencies:
 
