@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
+import { 
+  Box, 
+  TextField, 
+  Button, 
+  Typography, 
+  Stack, 
+  Paper,
+  Alert, 
+  CircularProgress
+} from '@mui/material';
 
 const CreateTaskForm = ({ householdId, onNext, onBack }) => {
   const [title, setTitle] = useState('Welcome Task');
@@ -12,7 +22,6 @@ const CreateTaskForm = ({ householdId, onNext, onBack }) => {
     setLoading(true);
     setErrorMsg('');
     try {
-      // Example: Direct insert or call an RPC
       const { data, error } = await supabase
         .from('tasks')
         .insert([
@@ -25,7 +34,6 @@ const CreateTaskForm = ({ householdId, onNext, onBack }) => {
         ]);
 
       if (error) throw error;
-
       onNext();
     } catch (error) {
       setErrorMsg(error.message);
@@ -35,40 +43,60 @@ const CreateTaskForm = ({ householdId, onNext, onBack }) => {
   };
 
   return (
-    <div>
-      <h2>Create Your First Task</h2>
-      <p>Let’s set up a simple task to get you started.</p>
-      <label>Title</label>
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        required
-      />
-      <br />
-      <label>Description</label>
-      <textarea
-        rows={3}
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <br />
-      <label>Due Date</label>
-      <input
-        type="date"
-        value={dueDate}
-        onChange={(e) => setDueDate(e.target.value)}
-      />
+    <Paper elevation={3} sx={{ p: 3 }}>
+      <Typography variant="h5" gutterBottom>Create Your First Task</Typography>
+      <Typography variant="body1" paragraph>Let's set up a simple task to get you started.</Typography>
+      
+      <Stack spacing={3} sx={{ mt: 3 }}>
+        <TextField
+          fullWidth
+          label="Title"
+          variant="outlined"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+        
+        <TextField
+          fullWidth
+          label="Description"
+          variant="outlined"
+          multiline
+          rows={3}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        
+        <TextField
+          fullWidth
+          label="Due Date"
+          type="date"
+          variant="outlined"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+          InputLabelProps={{ shrink: true }}
+        />
+      </Stack>
 
-      {errorMsg && <p style={{ color: 'red' }}>{errorMsg}</p>}
+      {errorMsg && <Alert severity="error" sx={{ mt: 2 }}>{errorMsg}</Alert>}
 
-      <div style={{ marginTop: '16px' }}>
-        <button onClick={onBack} disabled={loading}>Back</button>
-        <button onClick={createTask} disabled={loading}>
-          {loading ? 'Creating...' : 'Next'}
-        </button>
-      </div>
-    </div>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+        <Button 
+          variant="outlined" 
+          onClick={onBack} 
+          disabled={loading}
+        >
+          Back
+        </Button>
+        <Button 
+          variant="contained" 
+          onClick={createTask} 
+          disabled={loading}
+        >
+          {loading ? <CircularProgress size={24} /> : 'Next'}
+        </Button>
+      </Box>
+    </Paper>
   );
 };
 
