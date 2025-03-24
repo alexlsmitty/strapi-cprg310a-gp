@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { supabase } from '../supabaseClient';
-import { AuthContext } from '../AuthContext';
+import { useAuth } from '../auth/AuthContext';
 import { 
   Box, 
   TextField, 
@@ -15,14 +15,8 @@ import {
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
-const InviteMembersForm = ({
-  householdId,
-  inviteEmails,
-  setInviteEmails,
-  onNext,
-  onBack,
-}) => {
-  const { user } = useContext(AuthContext); // Get user from context
+const InviteMembersForm = ({ householdId, inviteEmails, setInviteEmails, onNext, onBack }) => {
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 

@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { AuthProvider } from './AuthContext';
+import { AuthProvider } from './auth/AuthContext';
 import './index.css';
 
 const theme = createTheme({

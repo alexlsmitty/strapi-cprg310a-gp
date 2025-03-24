@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
-import { AuthContext } from '../AuthContext';
+import { useAuth } from '../auth/AuthContext';
 import { 
   Box, 
   Typography, 
@@ -12,10 +12,10 @@ import {
   Button,
   Paper
 } from '@mui/material';
-import InviteMembersForm from '../smallComponents/InviteMembersForm';
-import CreateTaskForm from '../smallComponents/CreateTaskForm';
-import WelcomeStep from '../smallComponents/WelcomeStep';
-import OnboardingSuccess from '../smallComponents/OnboardingSuccess';
+import InviteMembersForm from './InviteMembersForm';
+import CreateTaskForm from '../features/tasks/CreateTaskForm';
+import WelcomeStep from './WelcomeStep';
+import OnboardingSuccess from './OnboardingSuccess';
 
 console.log("WelcomeStep:", WelcomeStep);
 console.log("InviteMembersForm:", InviteMembersForm);
@@ -23,8 +23,8 @@ console.log("CreateTaskForm:", CreateTaskForm);
 console.log("OnboardingSuccess:", OnboardingSuccess);
 
 const OnboardingWizard = () => {
+  const { user } = useAuth();
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
 
   // Step index to control the wizard
   const [step, setStep] = useState(0);

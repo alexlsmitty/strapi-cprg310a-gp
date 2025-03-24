@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '../supabaseClient';
+import { supabase } from '../../supabaseClient';
 
 const CreateTaskForm = ({ householdId, onNext, onBack }) => {
   const [title, setTitle] = useState('Welcome Task');

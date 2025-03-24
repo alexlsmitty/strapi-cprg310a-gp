@@ -1,15 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthContext } from './AuthContext';
-import OnboardingWizard from './pages/OnboardWizard';
-import LoginSignup from './pages/LoginSignup';
+import { useAuth } from './auth/AuthContext';
+import OnboardingWizard from './onboarding/OnboardWizard';
+import LoginSignup from './auth/LoginSignup';
 import Dashboard from './pages/Dashboard';
 import { supabase } from './supabaseClient';
 import { Box, Typography, CircularProgress } from '@mui/material';
+import TaskFeature from './features/tasks/taskFeature';
+import CalendarFeature from './features/calendar/calendarFeature';
+import BudgetFeature from './features/budget/budgetFeature';
+import NotFound from './pages/notFound';
 import './index.css';
 
 function App() {
-  const { user, authError } = useContext(AuthContext);
+  const { user, authError } = useAuth();
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [onboardingComplete, setOnboardingComplete] = useState(false);
   const [profileError, setProfileError] = useState(null);
@@ -139,9 +143,10 @@ function App() {
         {user && onboardingComplete && (
           <>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/login" element={<Navigate to="/" replace />} />
-            <Route path="/onboarding" element={<Navigate to="/" replace />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="/tasks" element={<TaskFeature />} />
+            <Route path="/calendar" element={<CalendarFeature />} />
+            <Route path="/budget" element={<BudgetFeature />} />
+            <Route path="*" element={<NotFound />} />
           </>
         )}
       </Routes>

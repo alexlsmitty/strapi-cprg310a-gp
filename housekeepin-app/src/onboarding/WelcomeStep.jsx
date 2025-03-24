@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { AuthContext } from '../AuthContext';
+import { useAuth } from '../auth/AuthContext';
 import { supabase } from '../supabaseClient';
 import { 
   Box,
@@ -13,7 +13,7 @@ import {
 import { motion } from 'framer-motion';
 
 const WelcomeStep = ({ household, onNext }) => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
