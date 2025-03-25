@@ -8,6 +8,7 @@ import TaskFeature from '../features/tasks/taskFeature';
 import CalendarFeature from '../features/calendar/calendarFeature';
 import BudgetFeature from '../features/budget/budgetFeature';
 import NotFound from '../pages/NotFound';
+import Account from '../pages/account';
 
 const AppRouter = () => (
   <BrowserRouter>
@@ -19,6 +20,7 @@ const AppRouter = () => (
         <Route path="/tasks" element={<TaskFeature />} />
         <Route path="/calendar" element={<CalendarFeature />} />
         <Route path="/budget" element={<BudgetFeature />} />
+        <Route path="/account" element={<Account />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

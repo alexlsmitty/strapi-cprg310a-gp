@@ -1,96 +1,95 @@
-# Housekeepin App
+# Housekeepin App 🏠📝💰
 
-Housekeepin App is a front-end application developed as part of the CPRG310A Group Project. It is designed to work with a Strapi backend to provide a full-stack solution. This document details how to set up and run the project locally.
+Welcome to **Housekeepin App** – your one-stop solution for managing household tasks, events, and budgets all in one place! 🎉 This application is designed to simplify household management, whether you're tracking chores, scheduling events, or keeping an eye on your budget. Invite family members, share responsibilities, and stay organized with ease. ✨
 
-## Table of Contents
+## Features 🚀
 
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Running the App Locally](#running-the-app-locally)
-- [Strapi Backend Setup](#strapi-backend-setup)
-- [Troubleshooting](#troubleshooting)
-- [Contributing](#contributing)
-- [License](#license)
+- **Calendar View** 📅  
+  Smooth, animated month transitions with a responsive grid that ensures all day cells maintain a consistent aspect ratio.
 
-## Prerequisites
+- **Task Management** ✅  
+  Create, edit, and track your household tasks to ensure nothing falls through the cracks.
 
-Before you begin, make sure you have the following installed on your machine:
+- **Budget Tracking** 💸  
+  Set a household budget, record transactions, and monitor your spending in real time.
 
-- [Node.js](https://nodejs.org) (LTS version recommended)
-- [npm](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/)
-- [Git](https://git-scm.com/)
+- **User Authentication** 🔒  
+  Securely sign up or log in using email or Google OAuth.
 
-> **Note:** This project assumes you're using the dedicated supabase db we are using, if you want to self-host then please change the API as needed. 
+- **Theme Switching** 🎨  
+  Easily toggle between Light, Dark, and Blue themes to suit your style and mood.
 
-## Installation
+- **Household Collaboration** 👨‍👩‍👧‍👦  
+  Invite and manage household members seamlessly to share responsibilities and stay connected.
 
-1. **Clone the Repository:**
+## Installation 🛠️
 
+Follow these steps to get the app up and running on your local machine:
+
+1. **Clone the Repository**  
    Open your terminal and run:
-
    ```bash
-   git clone https://github.com/alexlsmitty/strapi-cprg310a-gp.git
-   cd strapi-cprg310a-gp/housekeepin-app
-Install Dependencies:
+   git clone https://github.com/alexlsmitty/strapi-cprg310a-gp
+   ```
 
-Use npm or Yarn to install the required packages:
+2. **Navigate to the Project Directory**
+   ```bash
+   cd housekeepin-app
+   ```
 
-bash
-Copy
-npm install
-# or
-yarn install
-Configuration
-Environment Variables
-If the app requires environment-specific settings (like API endpoints), create a .env file in the root of the housekeepin-app directory. For example:
+3. **Install Dependencies**  
+   Install the required packages by running:
+   ```bash
+   npm install
+   ```
 
-env
-Copy
-# .env file example
-REACT_APP_API_URL=http://localhost:1337
-Replace http://localhost:1337 with the URL where your Supabase backend is running.
-Add or adjust any additional variables as needed.
-Supabase Backend Setup
-The Housekeepin App is designed to work with a Strapi backend. If you haven’t set up your Strapi instance yet, follow these steps:
+4. **Create *.env.local* File**
+   Create a file in the housekeepin-app directory called *.env.local,* with the following two lines (this connects to Supabase):
+   ```bash
+   VITE_SUPABASE_URL=https://kfyevvjbynehaegsedbm.supabase.co
+   VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtmeWV2dmpieW5laGFlZ3NlZGJtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA5OTkyMTEsImV4cCI6MjA1NjU3NTIxMX0.25YVqsQXeecJAPx8A-Vlnt3PyxnQYS13GlglDfv-Rh4
+   ```
+        
+5. **Run the Application**  
+   Start the development server with:
+   ```bash
+   npm run dev
+   ```
+   Your app should now be running at [http://localhost:3000](http://localhost:3000) (or the port specified by Vite)! 🚀
 
-Clone or Navigate to the Strapi Project:
+## Technology Stack 💻
 
-If the Strapi backend is included in this repository (or provided separately), navigate to its directory. Otherwise, clone the official Strapi repository or your own Strapi project.
+- **React** – For building a dynamic and interactive user interface.
+- **Vite** – A fast build tool and development server.
+- **Material-UI** – To provide a sleek, modern design with responsive components.
+- **Supabase** – Backend services for authentication and real-time database operations.
+- **date-fns** – For efficient date handling and formatting.
 
-Install Dependencies:
+## Usage 📱
 
-In your project folder, install the dependencies and run the server:
+After installing, open your browser and navigate to the app. From there, you can:
+- **Sign Up / Log In** using email or Google.
+- **Manage Tasks**: Add, update, and mark tasks as complete.
+- **View Calendar**: Check out your scheduled events and tasks in a monthly view with smooth animations.
+- **Track Budget**: Set up your household budget, add transactions, and see your remaining balance.
+- **Invite Members**: Create your household and invite others to join and collaborate.
 
-bash
-Copy
-npm install
-npm run develop
-# or with Yarn
-yarn install
-yarn develop
+Customize your experience with our theme switcher and enjoy a clutter-free, organized household management tool! 🌟
 
-Running the App Locally
-Start the Front-End Development Server:
+## Contributing 🤝
 
-In the housekeepin-app directory, run:
+Contributions are very welcome! If you have ideas for improvements, bug fixes, or new features, please feel free to:
+- Open an issue on GitHub.
+- Fork the repository and submit a pull request.
 
-bash
-Copy
-npm start
-# or
-yarn start
-Access the App:
+Let's build a better Housekeepin App together! 🛠️💪
 
-Open your browser and navigate to http://localhost:3000 (or the port specified in your project configuration).
+## License 📄
 
-Ensure Backend Connectivity:
+This project is open source and available under the [MIT License](LICENSE).
 
-Environment Variable Issues:
-Double-check your .env file to ensure that all variables are correctly defined and that the file is located in the project’s root.
+---
 
-Dependency Issues:
-Ensure you have a compatible version of Node.js and that all dependencies installed correctly. Deleting node_modules and reinstalling (npm install or yarn install) may help resolve issues.
+Enjoy organizing your household with Housekeepin App! 🏡✨  
+Happy managing! 🎉
 
-License
-This project is licensed under the MIT License. See the LICENSE file for details.

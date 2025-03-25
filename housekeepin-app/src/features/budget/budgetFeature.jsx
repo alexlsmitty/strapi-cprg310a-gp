@@ -24,20 +24,20 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 
 const BudgetFeature = () => {
-    const household_id = useAuth()
-    const { user } = useAuth();
+  // Destructure user from useAuth()
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   // Household membership details
   const [householdId, setHouseholdId] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
 
-  // Active budget data (fetched from budgets table)
+  // Active budget data (from budgets table)
   const [activeBudget, setActiveBudget] = useState(null);
   // Transactions for this household
   const [transactions, setTransactions] = useState([]);
 
-  // Dialog controls for budget creation and transaction submission
+  // Dialog state for budget creation and transaction submission
   const [openBudgetDialog, setOpenBudgetDialog] = useState(false);
   const [budgetName, setBudgetName] = useState('');
   const [budgetStartDate, setBudgetStartDate] = useState('');
@@ -45,7 +45,7 @@ const BudgetFeature = () => {
   const [budgetTotalAmount, setBudgetTotalAmount] = useState('');
 
   const [openTransactionDialog, setOpenTransactionDialog] = useState(false);
-  const [transactionType, setTransactionType] = useState('bill');
+  const [transactionType, setTransactionType] = useState('expense');
   const [transactionAmount, setTransactionAmount] = useState('');
 
   // --------------------------------------------------
@@ -77,9 +77,7 @@ const BudgetFeature = () => {
     if (!householdId) return;
 
     const fetchBudget = async () => {
-      // Use today's date (formatted as YYYY-MM-DD)
-      const today = new Date().toISOString().split('T')[0];
-      // Fetch the active budget (start_date ≤ today ≤ end_date)
+      const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
       const { data, error } = await supabase
         .from('budgets')
         .select('*')
@@ -98,7 +96,7 @@ const BudgetFeature = () => {
     const fetchTransactions = async () => {
       const { data, error } = await supabase
         .from('transactions')
-        .select('*')
+        .select('*, created_by ( full_name )')
         .eq('household_id', householdId)
         .order('created_at', { ascending: false });
       if (error) {
@@ -140,6 +138,7 @@ const BudgetFeature = () => {
     } else if (data && data.length > 0) {
       setActiveBudget(data[0]);
       setOpenBudgetDialog(false);
+      // Clear dialog fields
       setBudgetName('');
       setBudgetStartDate('');
       setBudgetEndDate('');
@@ -159,8 +158,8 @@ const BudgetFeature = () => {
     const { data, error } = await supabase
       .from('transactions')
       .insert([{
-        household_id,
-        transaction_type: transactionType, // 'bill' or 'contribution'
+        household_id: householdId,
+        transaction_type: transactionType, // 'expense' or 'contribution'
         amount,
         created_by: user.id
       }])
@@ -170,7 +169,8 @@ const BudgetFeature = () => {
     } else if (data && data.length > 0) {
       setTransactions(prev => [data[0], ...prev]);
       setOpenTransactionDialog(false);
-      setTransactionType('bill');
+      // Reset transaction dialog fields
+      setTransactionType('expense');
       setTransactionAmount('');
     }
   };
@@ -178,14 +178,14 @@ const BudgetFeature = () => {
   // --------------------------------------------------
   // 5. Calculate Remaining Budget
   // --------------------------------------------------
-  const totalBills = transactions
-    .filter(tx => tx.type === 'bill')
+  const totalexpenses = transactions
+    .filter(tx => tx.transaction_type === 'expense')
     .reduce((acc, tx) => acc + tx.amount, 0);
   const totalContributions = transactions
-    .filter(tx => tx.type === 'contribution')
+    .filter(tx => tx.transaction_type === 'contribution')
     .reduce((acc, tx) => acc + tx.amount, 0);
   const remainingBudget = activeBudget
-    ? activeBudget.total_amount - totalBills + totalContributions
+    ? activeBudget.total_amount - totalexpenses + totalContributions
     : 0;
 
   // --------------------------------------------------
@@ -210,7 +210,7 @@ const BudgetFeature = () => {
         </Typography>
       )}
 
-      {/* Owner can create a new budget */}
+      {/* Owner can create/update budget */}
       {isOwner && (
         <Button
           variant="contained"
@@ -281,19 +281,6 @@ const BudgetFeature = () => {
       >
         <DialogTitle>Add Transaction</DialogTitle>
         <DialogContent>
-          <FormControl fullWidth sx={{ mt: 2 }}>
-            <InputLabel id="transaction-type-label">Type</InputLabel>
-            <Select
-              labelId="transaction-type-label"
-              value={transactionType}
-              label="Type"
-              onChange={(e) => setTransactionType(e.target.value)}
-            >
-              <MenuItem value="bill">Bill</MenuItem>
-              <MenuItem value="contribution">Contribution</MenuItem>
-            </Select>
-          </FormControl>
-
           <TextField
             label="Amount"
             type="number"
@@ -302,6 +289,19 @@ const BudgetFeature = () => {
             onChange={(e) => setTransactionAmount(e.target.value)}
             sx={{ mt: 2 }}
           />
+          {/* Replace the TextField with a dropdown for Transaction Type */}
+          <FormControl fullWidth sx={{ mt: 2 }}>
+            <InputLabel id="transaction-type-label">Type</InputLabel>
+            <Select
+              labelId="transaction-type-label"
+              value={transactionType}
+              label="Type"
+              onChange={(e) => setTransactionType(e.target.value)}
+            >
+              <MenuItem value="expense">expense</MenuItem>
+              <MenuItem value="contribution">Contribution</MenuItem>
+            </Select>
+          </FormControl>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setOpenTransactionDialog(false)}>Cancel</Button>
@@ -325,12 +325,10 @@ const BudgetFeature = () => {
             <TableBody>
               {transactions.map(tx => (
                 <TableRow key={tx.id}>
-                  <TableCell>{tx.type}</TableCell>
+                  <TableCell>{tx.transaction_type}</TableCell>
                   <TableCell>${tx.amount.toFixed(2)}</TableCell>
-                  <TableCell>{tx.created_by}</TableCell>
-                  <TableCell>
-                    {new Date(tx.created_at).toLocaleString()}
-                  </TableCell>
+                  <TableCell>{tx.created_by ? tx.created_by.full_name : 'Unknown'}</TableCell>
+                  <TableCell>{new Date(tx.created_at).toLocaleString()}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

@@ -5,6 +5,7 @@ import { useAuth } from '../../auth/AuthContext';
 import { supabase } from '../../supabaseClient';
 import AddTaskForm from './AddTaskForm';
 import TaskList from './TaskList';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const TaskFeature = () => {
   const { user } = useAuth();
@@ -51,12 +52,23 @@ const TaskFeature = () => {
       >
         {showAddTask ? 'Hide Add Task Form' : 'Add Task'}
       </Button>
-      
-      {showAddTask && (
-        <AddTaskForm householdId={householdId} onTaskAdded={handleTaskAdded} />
-      )}
 
-      {/* Refresh TaskList when refreshKey changes */}
+      {/* Animate the AddTaskForm appearance */}
+      <AnimatePresence>
+        {showAddTask && (
+          <motion.div
+            key="addTaskForm"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+          >
+            <AddTaskForm householdId={householdId} onTaskAdded={handleTaskAdded} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Task list which already has its own animations */}
       <TaskList householdId={householdId} key={refreshKey} />
 
       <Button

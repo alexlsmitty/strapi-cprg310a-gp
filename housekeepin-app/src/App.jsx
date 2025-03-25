@@ -1,156 +1,107 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from './auth/AuthContext';
-import OnboardingWizard from './onboarding/OnboardWizard';
-import LoginSignup from './auth/LoginSignup';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import Dashboard from './pages/Dashboard';
-import { supabase } from './supabaseClient';
-import { Box, Typography, CircularProgress } from '@mui/material';
 import TaskFeature from './features/tasks/taskFeature';
 import CalendarFeature from './features/calendar/calendarFeature';
 import BudgetFeature from './features/budget/budgetFeature';
-import NotFound from './pages/notFound';
-import './index.css';
+import LoginSignup from './auth/LoginSignup';
+import Account from './pages/account';
+import Invite from './pages/invite';
+import CustomAppbar from './components/Common/appbar';
+import ProtectedRoute from './routes/protectedRoute';
 
-function App() {
-  const { user, authError } = useAuth();
-  const [loadingProfile, setLoadingProfile] = useState(true);
-  const [onboardingComplete, setOnboardingComplete] = useState(false);
-  const [profileError, setProfileError] = useState(null);
+// Page transition variants
+const pageVariants = {
+  initial: { opacity: 0, y: -20 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: 20 }
+};
 
-  // After AuthContext loads user, fetch a profile or household info
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        // If not authenticated, don't fetch profile
-        if (user === undefined) {
-          return; // Still loading
-        }
-        
-        if (user === null) {
-          console.log("No authenticated user");
-          setLoadingProfile(false);
-          return;
-        }
+const pageTransition = {
+  duration: 0.5,
+  ease: 'easeInOut'
+};
 
-        console.log("Fetching user profile for:", user.id);
-        
-        // Query the users table for the current user
-        const { data, error } = await supabase
-          .from('users')
-          .select('onboard_success')
-          .eq('id', user.id)
-          .single();
-
-        if (error) {
-          console.error('Error fetching user profile:', error);
-          setProfileError(error.message);
-          setOnboardingComplete(false);
-        } else {
-          console.log("User data:", data);
-          setOnboardingComplete(!!data?.onboard_success);
-        }
-      } catch (err) {
-        console.error('Error in fetchProfile:', err);
-        setProfileError(err.message);
-        setOnboardingComplete(false);
-      } finally {
-        if (user !== undefined) { // Only set loading to false if auth state is determined
-          setLoadingProfile(false);
-        }
-      }
-    };
-
-    fetchProfile();
-  }, [user]);
-
-  // Still determining auth state
-  if (user === undefined) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <Box sx={{ textAlign: 'center' }}>
-          <CircularProgress />
-          <Typography variant="body1" sx={{ mt: 2 }}>
-            Checking authentication...
-          </Typography>
-        </Box>
-      </Box>
-    );
-  }
-
-  // Auth error
-  if (authError) {
-    return (
-      <Box sx={{ p: 3, textAlign: 'center' }}>
-        <Typography variant="h5" color="error">Authentication Error</Typography>
-        <Typography variant="body1">{authError}</Typography>
-        <Typography variant="body2" sx={{ mt: 2 }}>
-          Please check your network connection or try clearing your browser cache.
-        </Typography>
-      </Box>
-    );
-  }
-
-  // Profile loading
-  if (loadingProfile) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <Box sx={{ textAlign: 'center' }}>
-          <CircularProgress />
-          <Typography variant="body1" sx={{ mt: 2 }}>
-            Loading user profile...
-          </Typography>
-        </Box>
-      </Box>
-    );
-  }
-  
-  // Profile error
-  if (profileError) {
-    return (
-      <Box sx={{ p: 3, textAlign: 'center' }}>
-        <Typography variant="h5" color="error">Profile Error</Typography>
-        <Typography variant="body1">{profileError}</Typography>
-        <Button variant="contained" onClick={() => window.location.reload()}>
-          Reload Page
-        </Button>
-      </Box>
-    );
-  }
-
-  console.log('App rendering with state:', { user: !!user, onboardingComplete });
+// A wrapper component that applies the motion to each route element
+const AnimatedRoutes = () => {
+  const location = useLocation();
 
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* If no user, always go to /login */}
-        {!user && (
-          <>
-            <Route path="/login" element={<LoginSignup />} />
-            <Route path="*" element={<Navigate to="/login" replace />} />
-          </>
-        )}
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={location.pathname}
+        variants={pageVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        transition={pageTransition}
+        style={{ minHeight: 'calc(100vh - 64px)' }} // subtract AppBar height if needed
+      >
+        <Routes location={location}>
+          <Route path="/login" element={<LoginSignup />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tasks"
+            element={
+              <ProtectedRoute>
+                <TaskFeature />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/calendar"
+            element={
+              <ProtectedRoute>
+                <CalendarFeature />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/budget"
+            element={
+              <ProtectedRoute>
+                <BudgetFeature />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/account"
+            element={
+              <ProtectedRoute>
+                <Account />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/invite"
+            element={
+              <ProtectedRoute>
+                <Invite />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<div>404 Not Found</div>} />
+        </Routes>
+      </motion.div>
+    </AnimatePresence>
+  );
+};
 
-        {/* If logged in but not onboarded, default to /onboarding */}
-        {user && !onboardingComplete && (
-          <>
-            <Route path="/onboarding" element={<OnboardingWizard />} />
-            <Route path="*" element={<Navigate to="/onboarding" replace />} />
-          </>
-        )}
-
-        {/* If logged in AND onboarded, show main app */}
-        {user && onboardingComplete && (
-          <>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/tasks" element={<TaskFeature />} />
-            <Route path="/calendar" element={<CalendarFeature />} />
-            <Route path="/budget" element={<BudgetFeature />} />
-            <Route path="*" element={<NotFound />} />
-          </>
-        )}
-      </Routes>
-    </BrowserRouter>
+function App() {
+  return (
+    <Router>
+      {/* The Appbar is rendered outside of the animated area */}
+      <CustomAppbar />
+      <AnimatedRoutes />
+    </Router>
   );
 }
 

@@ -1,4 +1,3 @@
-// ErrorBoundary Component to catch rendering errors in LoginSignup
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
